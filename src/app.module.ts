@@ -1,10 +1,14 @@
+
+import { DatabaseModule } from '@devflags/database';
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
+import { ConfigModule } from '@nestjs/config';
+import { AuthModule } from '@thallesp/nestjs-better-auth';
+import { auth } from "../auth"; // Your Better Auth instance
+
+
 
 @Module({
-  imports: [],
-  controllers: [AppController],
-  providers: [AppService],
+  imports: [ConfigModule.forRoot({ isGlobal: true }), DatabaseModule, AuthModule.forRoot({ auth }),
+  ],
 })
-export class AppModule {}
+export class AppModule { }
