@@ -1,0 +1,43 @@
+enum RuleOperator {
+    EQUALS
+    NOT_EQUALS
+    CONTAINS
+    NOT_CONTAINS
+    STARTS_WITH
+    ENDS_WITH
+    IN
+    NOT_IN
+    GREATER_THAN
+    LESS_THAN
+    GREATER_THAN_OR_EQUAL
+    LESS_THAN_OR_EQUAL
+}
+
+model TargetingRule {
+    id     String @id @default(uuid()) @db.Uuid
+    flagId String @db.Uuid
+
+    priority   Int  @default(0)
+    percentage Int?
+    value      Json
+
+    createdAt DateTime @default(now())
+
+    flag       FeatureFlag     @relation(fields: [flagId], references: [id], onDelete: Cascade)
+    conditions RuleCondition[]
+
+    @@index([flagId, priority])
+}
+
+model RuleCondition {
+    id     String @id @default(uuid()) @db.Uuid
+    ruleId String @db.Uuid
+
+    attribute String
+    operator  RuleOperator
+    value     Json
+
+    rule TargetingRule @relation(fields: [ruleId], references: [id], onDelete: Cascade)
+
+    @@index([ruleId])
+}

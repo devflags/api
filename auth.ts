@@ -19,7 +19,7 @@ const authOptions: BetterAuthOptions = {
             generateId: "uuid"
         },
     },
-    user: {
+    /* user: {
         additionalFields: {
             role: {
                 type: ["MEMBER", "ADMIN"],
@@ -28,7 +28,7 @@ const authOptions: BetterAuthOptions = {
                 input: false,
             },
         },
-    },
+    }, */
 
     plugins: [
         organization({
@@ -36,7 +36,7 @@ const authOptions: BetterAuthOptions = {
                 return user.role === "ADMIN";
             },
         }),
-        admin()
+        /*  admin() */
     ],
     rateLimit: {
         enabled: true,

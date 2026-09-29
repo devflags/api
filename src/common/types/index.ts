@@ -1,18 +1,11 @@
-import type { BaseUserSession, UserSession } from '@thallesp/nestjs-better-auth';
-import type { auth } from '../../../auth';
+import type { UserSession } from "@thallesp/nestjs-better-auth";
 
-export const UserRole = {
-    USER: 'USER',
-    ADMIN: 'ADMIN',
-} as const;
+export type AuthUser = Pick<
+    UserSession["user"],
+    "id" | "email" | "name"
+>;
 
-export type UserRole = typeof UserRole[keyof typeof UserRole];
-
-
-export type AuthenticatedUser = Omit<BaseUserSession['user'], 'role'> & {
-    role: UserRole;
-};
-
-export type AppUserSession = Omit<UserSession<typeof auth>, 'user'> & {
-    user: AuthenticatedUser;
-};
+export type AuthSession = Pick<
+    UserSession["session"],
+    "id" | "userId" | "expiresAt" | "activeOrganizationId"
+>;
