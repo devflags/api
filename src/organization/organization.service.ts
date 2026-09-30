@@ -15,6 +15,8 @@ export class OrganizationService {
         });
     }
 
+    
+
     async requireAdmin(userId: string, organizationId: string) {
         const member = await this.getMember(userId, organizationId);
 
