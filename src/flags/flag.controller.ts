@@ -2,6 +2,7 @@ import { Body, Controller, Param, Post, Session } from "@nestjs/common";
 import { OrgRoles, UserSession } from "@thallesp/nestjs-better-auth";
 import { ActiveOrganizationId } from "src/common/decorators/current-active-org.decorator";
 import { CurrentUser } from "src/common/decorators/current-user.decorator";
+import { CreateFlagDto } from "./dtos/create-flag.dto";
 
 @Controller("projects/:projectId")
 export class FlagController {

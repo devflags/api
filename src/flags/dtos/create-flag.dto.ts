@@ -19,7 +19,8 @@ export class CreateFlagEnvironmentDto {
     @IsBoolean()
     enabled!: boolean;
 
-    defaultValue: unknown;
+    @IsOptional()
+    defaultValue?: unknown;
 }
 
 export class CreateFlagDto {
