@@ -1,7 +1,11 @@
 import { DatabaseService } from "@devflags/database";
+import { BadRequestException, Injectable } from "@nestjs/common";
 import { CreateFlagDto } from "./dtos/create-flag.dto";
 import { OrganizationService } from "src/organization/organization.service";
+import { FeatureFlagType } from "@devflags/database/generated/prisma/browser";
+import { Prisma } from "@devflags/database/generated/prisma/client";
 
+@Injectable()
 export class FlagService {
     constructor(private readonly database: DatabaseService, private readonly organizationService: OrganizationService) { }
 
@@ -11,12 +15,53 @@ export class FlagService {
         dto: CreateFlagDto,
     ) {
 
+        for (const env of dto.environments || []) {
+            switch (dto.type) {
+                case FeatureFlagType.BOOLEAN:
+                    if (typeof env.defaultValue !== "boolean") {
+                        throw new BadRequestException(
+                            "defaultValue must be a boolean",
+                        );
+                    }
+                    break;
+
+                case FeatureFlagType.STRING:
+                    if (typeof env.defaultValue !== "string") {
+                        throw new BadRequestException(
+                            "defaultValue must be a string",
+                        );
+                    }
+                    break;
+
+                case FeatureFlagType.NUMBER:
+                    if (typeof env.defaultValue !== "number") {
+                        throw new BadRequestException(
+                            "defaultValue must be a number",
+                        );
+                    }
+                    break;
+            }
+        }
+
+
+        const environmentsData = (dto.environments || []).map((env) => ({
+            environment: {
+                connect: {
+                    id: env.environmentId,
+                },
+            },
+            enabled: env.enabled,
+            defaultValue: env.defaultValue as Prisma.InputJsonValue,
+        }));
 
         return this.database.featureFlag.create({
             data: {
-                key
+                key: dto.key,
                 name: dto.name,
                 projectId,
+                environments: {
+                    create: environmentsData,
+                },
             },
         });
     }
