@@ -1,7 +1,9 @@
 import { Auth, betterAuth, type BetterAuthOptions } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
 import { prisma } from "./database/prisma";
-import { admin, organization } from "better-auth/plugins";
+import { organization } from "better-auth/plugins";
+import { dash } from "@better-auth/infra";
+
 
 
 const authOptions: BetterAuthOptions = {
@@ -12,8 +14,30 @@ const authOptions: BetterAuthOptions = {
     emailAndPassword: {
         enabled: true,
     },
+    socialProviders: {
+        google: {
+            clientId: process.env.GOOGLE_CLIENT_ID as string,
+            clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
+        },
+        github: {
+            clientId: process.env.GITHUB_CLIENT_ID as string,
+            clientSecret: process.env.GITHUB_CLIENT_SECRET as string,
+        },
+    },
 
-    trustedOrigins: [process.env.TRUSTED_ORIGINS || "http://localhost:3000"],
+    trustedOrigins: [
+        "http://localhost:3000",
+        "http://127.0.0.1:3000",
+        ...(process.env.TRUSTED_ORIGINS ? [process.env.TRUSTED_ORIGINS] : []),
+    ],
+
+    account: {
+        accountLinking: {
+            enabled: true,
+            trustedProviders: ["google", "github"],
+            requireLocalEmailVerified: false,
+        },
+    },
 
     advanced: {
         database: {
@@ -38,6 +62,7 @@ const authOptions: BetterAuthOptions = {
                 return user.role === "ADMIN";
             },
         }),
+        dash(),
         /*  admin() */
     ],
     rateLimit: {
