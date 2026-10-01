@@ -1,13 +1,12 @@
-import { DatabaseService } from "@devflags/database";
+import { DatabaseService } from "../database/database.service";
 import { BadRequestException, Injectable } from "@nestjs/common";
 import { CreateFlagDto } from "./dtos/create-flag.dto";
-import { OrganizationService } from "src/organization/organization.service";
-import { FeatureFlagType } from "@devflags/database/generated/prisma/browser";
-import { Prisma } from "@devflags/database/generated/prisma/client";
+import { FeatureFlagType } from "../database/generated/prisma/browser";
+import { Prisma } from "../database/generated/prisma/client";
 
 @Injectable()
 export class FlagService {
-    constructor(private readonly database: DatabaseService, private readonly organizationService: OrganizationService) { }
+    constructor(private readonly database: DatabaseService) { }
 
     async create(
         projectId: string,

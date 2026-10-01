@@ -10,7 +10,7 @@ import {
     ValidateNested,
 } from "class-validator";
 import { Type } from "class-transformer";
-import { FeatureFlagType } from "@devflags/database/generated/prisma/browser";
+import { FeatureFlagType } from "../../database/generated/prisma/browser";
 
 export class CreateFlagEnvironmentDto {
     @IsUUID()

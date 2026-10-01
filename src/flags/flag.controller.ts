@@ -3,9 +3,11 @@ import { OrgRoles, UserSession } from "@thallesp/nestjs-better-auth";
 import { ActiveOrganizationId } from "src/common/decorators/current-active-org.decorator";
 import { CurrentUser } from "src/common/decorators/current-user.decorator";
 import { CreateFlagDto } from "./dtos/create-flag.dto";
+import { FlagService } from "./flag.service";
 
 @Controller("projects/:projectId")
 export class FlagController {
+    constructor(private readonly flagsService: FlagService) { }
     // Add your flag-related endpoints here
 
     @Post("flags/:flagId")

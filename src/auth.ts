@@ -1,6 +1,6 @@
 import { Auth, betterAuth, type BetterAuthOptions } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
-import { prisma } from "@devflags/database"; // your prisma client instance
+import { prisma } from "./database/prisma";
 import { admin, organization } from "better-auth/plugins";
 
 

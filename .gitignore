@@ -58,5 +58,5 @@ pids
 report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
 
 /generated/prisma
-/libs/database/src/generated/prisma/
+/src/database/generated/prisma/
 /.prisma/

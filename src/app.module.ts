@@ -1,10 +1,12 @@
 
-import { DatabaseModule } from '@devflags/database';
+import { DatabaseModule } from './database/database.module';
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { AuthModule } from '@thallesp/nestjs-better-auth';
-import { auth } from "../auth"; // Your Better Auth instance
+import { auth } from "./auth"; // Your Better Auth instance
 import { ProjectModule } from './projects/project.module';
+import { FlagModule } from './flags/flag.module';
+import { EnvironmentModule } from './environment/environment.module';
 
 
 
@@ -13,6 +15,8 @@ import { ProjectModule } from './projects/project.module';
     DatabaseModule,
   AuthModule.forRoot({ auth }),
     ProjectModule,
+    FlagModule,
+    EnvironmentModule
   ],
 })
 export class AppModule { }

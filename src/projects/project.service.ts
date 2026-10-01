@@ -1,6 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { CreateProjectDto } from "./dtos/create-project.dto";
-import { DatabaseService } from "@devflags/database/database.service";
+import { DatabaseService } from "../database/database.service";
 import { OrganizationService } from "src/organization/organization.service";
 import slugify from "slugify";
 
