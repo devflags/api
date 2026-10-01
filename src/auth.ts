@@ -13,6 +13,8 @@ const authOptions: BetterAuthOptions = {
         enabled: true,
     },
 
+    trustedOrigins: [process.env.TRUSTED_ORIGINS || "http://localhost:3000"],
+
     advanced: {
         database: {
             joins: true, // Enable database joins for better performance
