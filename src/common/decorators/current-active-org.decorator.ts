@@ -1,9 +1,21 @@
-import { createParamDecorator, ExecutionContext } from "@nestjs/common";
+import {
+    createParamDecorator,
+    ExecutionContext,
+    ForbiddenException,
+} from "@nestjs/common";
 
 export const ActiveOrganizationId = createParamDecorator(
     (_data: unknown, ctx: ExecutionContext) => {
         const request = ctx.switchToHttp().getRequest();
 
-        return request.session.activeOrganizationId;
+        const organizationId = request.session?.session?.activeOrganizationId;
+
+        if (!organizationId) {
+            throw new ForbiddenException(
+                "An active organization is required for this request.",
+            );
+        }
+
+        return organizationId;
     },
 );

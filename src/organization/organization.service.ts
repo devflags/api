@@ -1,5 +1,6 @@
 import { DatabaseService } from "../database/database.service";
 import { ForbiddenException, Injectable } from "@nestjs/common";
+import { getFirstOrganizationForUser } from "./organization.queries";
 
 @Injectable()
 export class OrganizationService {
@@ -14,8 +15,6 @@ export class OrganizationService {
             },
         });
     }
-
-
 
     async requireAdmin(userId: string, organizationId: string) {
         const member = await this.getMember(userId, organizationId);

@@ -3,6 +3,7 @@ import { prismaAdapter } from "better-auth/adapters/prisma";
 import { prisma } from "./database/prisma";
 import { organization } from "better-auth/plugins";
 import { dash } from "@better-auth/infra";
+import { getFirstOrganizationForUser } from "./organization/organization.queries";
 
 
 
@@ -45,6 +46,24 @@ const authOptions: BetterAuthOptions = {
             generateId: "uuid"
         },
     },
+    databaseHooks: {
+        session: {
+            create: {
+                before: async (session) => {
+                    const org = await getFirstOrganizationForUser(
+                        prisma,
+                        session.userId,
+                    );
+                    return {
+                        data: {
+                            ...session,
+                            activeOrganizationId: org?.id ?? null,
+                        },
+                    }
+                },
+            },
+        },
+    },
     /* user: {
         additionalFields: {
             role: {
@@ -58,9 +77,7 @@ const authOptions: BetterAuthOptions = {
 
     plugins: [
         organization({
-            allowUserToCreateOrganization: async (user) => {
-                return user.role === "ADMIN";
-            },
+            allowUserToCreateOrganization: async () => true,
         }),
         dash(),
         /*  admin() */

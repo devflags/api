@@ -11,9 +11,14 @@ export class ProjectService {
     }
 
     async getProjects(organizationId: string) {
-        await this.database.project.findMany({
+        return this.database.project.findMany({
             where: {
                 organizationId,
+            },
+            select: {
+                id: true,
+                name: true,
+                slug: true,
             },
         });
     }
@@ -33,8 +38,14 @@ export class ProjectService {
         return this.database.project.create({
             data: {
                 name: dto.name,
+                description: dto.description,
                 slug: slug,
                 organizationId,
+            },
+            select: {
+                id: true,
+                name: true,
+                slug: true,
             },
         });
     }
