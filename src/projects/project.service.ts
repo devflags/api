@@ -23,6 +23,20 @@ export class ProjectService {
         });
     }
 
+    async getProject(organizationId: string, projectId: string) {
+        return this.database.project.findFirst({
+            where: {
+                organizationId,
+                id: projectId,
+            },
+            select: {
+                id: true,
+                name: true,
+                slug: true,
+            },
+        });
+    }
+
     async create(
         userId: string,
         organizationId: string,
@@ -41,6 +55,10 @@ export class ProjectService {
                 description: dto.description,
                 slug: slug,
                 organizationId,
+                environment: {
+                    name: "Production",
+                    slug: "production",
+                }
             },
             select: {
                 id: true,

@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post } from "@nestjs/common";
+import { Body, Controller, Get, Param, Post } from "@nestjs/common";
 import { OrgRoles, Session, type UserSession } from '@thallesp/nestjs-better-auth';
 import { CreateProjectDto } from "./dtos/create-project.dto";
 import { ActiveOrganizationId } from "src/common/decorators/current-active-org.decorator";
@@ -17,6 +17,12 @@ export class ProjectController {
     @OrgRoles(["owner", "admin", "member"])
     async getProjects(@ActiveOrganizationId() organizationId: string) {
         return this.projectsService.getProjects(organizationId);
+    }
+
+    @Get(":id")
+    @OrgRoles(["owner", "admin", "member"])
+    async getProject(@ActiveOrganizationId() organizationId: string, @Param("id") id: string) {
+        return this.projectsService.getProject(organizationId, id);
     }
 
     @Post()

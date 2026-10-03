@@ -8,6 +8,34 @@ import { Prisma } from "../database/generated/prisma/client";
 export class FlagService {
     constructor(private readonly database: DatabaseService) { }
 
+    getAll(projectId: string) {
+        return this.database.featureFlag.findMany({
+            where: {
+                projectId,
+            },
+            select: {
+                id: true,
+                key: true,
+                name: true,
+                type: true,
+                description: true,
+                environments: {
+                    select: {
+                        environment: {
+                            select: {
+                                id: true,
+                                name: true,
+                                slug: true,
+                            },
+                        },
+                        enabled: true,
+                        defaultValue: true,
+                    },
+                },
+            },
+        });
+    }
+
     async create(
         projectId: string,
         organizationId: string,
@@ -46,7 +74,7 @@ export class FlagService {
         const environmentsData = (dto.environments || []).map((env) => ({
             environment: {
                 connect: {
-                    id: env.environmentId,
+                    id: env.id,
                 },
             },
             enabled: env.enabled,

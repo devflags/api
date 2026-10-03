@@ -14,7 +14,7 @@ import { FeatureFlagType } from "../../database/generated/prisma/browser";
 
 export class CreateFlagEnvironmentDto {
     @IsUUID()
-    environmentId!: string;
+    id!: string;
 
     @IsBoolean()
     enabled!: boolean;
