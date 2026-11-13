@@ -12,16 +12,6 @@ import {
 import { Type } from "class-transformer";
 import { FeatureFlagType } from "../../database/generated/prisma/browser";
 
-export class CreateFlagEnvironmentDto {
-    @IsUUID()
-    id!: string;
-
-    @IsBoolean()
-    enabled!: boolean;
-
-    @IsOptional()
-    defaultValue?: unknown;
-}
 
 export class CreateFlagDto {
     @IsString()
@@ -41,9 +31,4 @@ export class CreateFlagDto {
 
     @IsEnum(FeatureFlagType)
     type!: FeatureFlagType;
-
-    @IsArray()
-    @ValidateNested({ each: true })
-    @Type(() => CreateFlagEnvironmentDto)
-    environments?: CreateFlagEnvironmentDto[];
 }

@@ -22,13 +22,10 @@ export class FlagController {
     @OrgRoles(["owner", "admin"])
     createFlag(
         @Param("projectId") projectId: string,
-        @CurrentUser() user: UserSession["user"],
-        @ActiveOrganizationId() organizationId: string,
         @Body() dto: CreateFlagDto,
     ) {
         return this.flagsService.create(
             projectId,
-            organizationId,
             dto,
         );
     }

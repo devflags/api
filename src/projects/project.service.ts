@@ -55,9 +55,11 @@ export class ProjectService {
                 description: dto.description,
                 slug: slug,
                 organizationId,
-                environment: {
-                    name: "Production",
-                    slug: "production",
+                environments: {
+                    create: {
+                        name: "Production",
+                        slug: "production",
+                    }
                 }
             },
             select: {
