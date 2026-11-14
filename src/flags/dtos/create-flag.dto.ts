@@ -32,3 +32,26 @@ export class CreateFlagDto {
     @IsEnum(FeatureFlagType)
     type!: FeatureFlagType;
 }
+
+export class UpdateFlagDto {
+    @IsOptional()
+    @IsString()
+    @MinLength(1)
+    @MaxLength(100)
+    key?: string;
+
+    @IsOptional()
+    @IsString()
+    @MinLength(1)
+    @MaxLength(100)
+    name?: string;
+
+    @IsOptional()
+    @IsString()
+    @MaxLength(500)
+    description?: string;
+
+    @IsOptional()
+    @IsEnum(FeatureFlagType)
+    type?: FeatureFlagType;
+}
