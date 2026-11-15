@@ -32,6 +32,7 @@ model FlagEnvironment {
 
     enabled      Boolean
     defaultValue Json
+    publicAccess Boolean @default(false)
 
     flag        FeatureFlag @relation(fields: [flagId], references: [id], onDelete: Cascade)
     environment Environment @relation(fields: [environmentId], references: [id], onDelete: Cascade)
@@ -41,4 +42,3 @@ model FlagEnvironment {
     @@unique([flagId, environmentId])
     @@index([environmentId])
 }
-

@@ -33,6 +33,7 @@ export class ProjectService {
                 id: true,
                 name: true,
                 slug: true,
+                createdAt: true,
             },
         });
     }

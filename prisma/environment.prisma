@@ -1,3 +1,8 @@
+enum EnvironmentKeyType {
+    PUBLISHABLE
+    SECRET
+}
+
 model Environment {
     id        String @id @default(uuid()) @db.Uuid
     projectId String @db.Uuid
@@ -22,8 +27,10 @@ model EnvironmentKey {
     environmentId String @db.Uuid
 
     name      String
-    keyHash   String @unique
+    type      EnvironmentKeyType
+    keyHash   String             @unique
     keyPrefix String
+    key       String?            @db.VarChar(255)
 
     createdAt  DateTime  @default(now())
     lastUsedAt DateTime?

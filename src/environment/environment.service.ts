@@ -5,13 +5,14 @@ import slugify from 'slugify';
 import { Prisma } from '../database/generated/prisma/client';
 import { OrganizationService } from 'src/organization/organization.service';
 import { NotFoundException } from '@nestjs/common';
+import { randomBytes, createHash } from "node:crypto";
 
 @Injectable()
 export class EnvironmentService {
   constructor(
     private readonly database: DatabaseService,
     private readonly organizationService: OrganizationService,
-  ) {}
+  ) { }
 
   getEnvironments(organizationId: string, projectId: string) {
     return this.database.environment.findMany({
@@ -23,6 +24,7 @@ export class EnvironmentService {
         id: true,
         name: true,
         slug: true,
+        createdAt: true,
       },
     });
   }
@@ -41,6 +43,8 @@ export class EnvironmentService {
     });
     if (!project) throw new NotFoundException('Project not found.');
 
+    const publishableKey = generateApiKey("pub");
+
     return this.database.$transaction(async (transaction) => {
       const environment = await transaction.environment.create({
         data: {
@@ -49,6 +53,15 @@ export class EnvironmentService {
           project: {
             connect: {
               id: projectId,
+            },
+          },
+          keys: {
+            create: {
+              name: "Publishable Key",
+              type: "PUBLISHABLE",
+              key: publishableKey.key,
+              keyHash: publishableKey.keyHash,
+              keyPrefix: publishableKey.keyPrefix,
             },
           },
         },
@@ -70,7 +83,32 @@ export class EnvironmentService {
         });
       }
 
-      return environment;
+      return {
+        ...environment,
+        publishableKey: publishableKey.key,
+      };
     });
   }
+}
+
+
+
+type KeyType = "pub" | "sec";
+
+function generateApiKey(type: KeyType) {
+  const secret = randomBytes(32).toString("base64url");
+
+  const key = `df_${type}_${secret}`;
+
+  const keyHash = createHash("sha256")
+    .update(key)
+    .digest("hex");
+
+  const keyPrefix = key.slice(0, 12);
+
+  return {
+    key,
+    keyHash,
+    keyPrefix,
+  };
 }
